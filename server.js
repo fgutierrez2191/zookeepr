@@ -9,6 +9,8 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
 app.use(express.json());
+//serve front end assets including style.css
+app.use(express.static('public'));
 
 function filterByQuery(query, animalsArray) {
     let personalityTraitsArray = [];
@@ -110,9 +112,26 @@ function filterByQuery(query, animalsArray) {
       const animal = createNewAnimal(req.body, animals);
       res.json(animal);
     }
-  
-
   });
+
+  //route used to serve index.html
+  app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+  });
+  //route used to serve animals.html
+  app.get('/animals', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/animals.html'));
+  });
+
+  //route used to serve zookeeprs.html
+  app.get('/zookeepers', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+  });
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+  });
+
 
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`);
